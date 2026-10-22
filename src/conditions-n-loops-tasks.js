@@ -406,7 +406,7 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/*str, iterations*/) {
+function shuffleChar(/* str, iterations */) {
   throw new Error('Not implemented');
 }
 
