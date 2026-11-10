@@ -413,8 +413,27 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const result = matrix;
+  const size = result.length;
+
+  for (let row = 0; row < size; row += 1) {
+    for (let column = row + 1; column < size; column += 1) {
+      const value = result[row][column];
+      result[row][column] = result[column][row];
+      result[column][row] = value;
+    }
+  }
+
+  for (let row = 0; row < size; row += 1) {
+    for (let left = 0, right = size - 1; left < right; left += 1, right -= 1) {
+      const value = result[row][left];
+      result[row][left] = result[row][right];
+      result[row][right] = value;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -431,8 +450,48 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const result = arr;
+
+  function siftDown(root, end) {
+    let parent = root;
+
+    while (parent * 2 + 1 <= end) {
+      const leftChild = parent * 2 + 1;
+      const rightChild = leftChild + 1;
+      let largest = parent;
+
+      if (result[largest] < result[leftChild]) {
+        largest = leftChild;
+      }
+
+      if (rightChild <= end && result[largest] < result[rightChild]) {
+        largest = rightChild;
+      }
+
+      if (largest === parent) {
+        return;
+      }
+
+      const value = result[parent];
+      result[parent] = result[largest];
+      result[largest] = value;
+      parent = largest;
+    }
+  }
+
+  for (let i = Math.floor(result.length / 2) - 1; i >= 0; i -= 1) {
+    siftDown(i, result.length - 1);
+  }
+
+  for (let end = result.length - 1; end > 0; end -= 1) {
+    const value = result[0];
+    result[0] = result[end];
+    result[end] = value;
+    siftDown(0, end - 1);
+  }
+
+  return result;
 }
 
 /**
@@ -452,8 +511,33 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  if (str.length < 2 || iterations === 0) {
+    return str;
+  }
+
+  const modulus = str.length % 2 === 0 ? str.length - 1 : str.length;
+  let exponent = iterations;
+  let base = 2 % modulus;
+  let multiplier = 1;
+
+  while (exponent > 0) {
+    if (exponent % 2 === 1) {
+      multiplier = (multiplier * base) % modulus;
+    }
+
+    base = (base * base) % modulus;
+    exponent = Math.floor(exponent / 2);
+  }
+
+  let result = '';
+
+  for (let i = 0; i < str.length; i += 1) {
+    const sourceIndex = i === modulus ? i : (i * multiplier) % modulus;
+    result += str[sourceIndex];
+  }
+
+  return result;
 }
 
 /**
